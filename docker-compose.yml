@@ -37,7 +37,7 @@ services:
       POSTGRES_DB: ${STORAGE_POSTGRES_DB}
     volumes:
       - ./storage/docker/db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
-      - db:/var/lib/postgresql/data
+      - dbS:/var/lib/postgresql/data
     networks:
       - users
     ports:
@@ -70,3 +70,4 @@ networks:
   users:
 volumes:
   db:
+  dbS:
