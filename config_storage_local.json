@@ -1,0 +1,22 @@
+{
+  "name": "storage-service",
+  "system": {
+    "db": {
+      "dialect": "postgres",
+      "host": "storage_db",
+      "port": "5432",
+      "user": "app",
+      "password": "pass",
+      "database": "app"
+    },
+    "log": {
+      "level": 4,
+      "filename": ""
+    }
+  },
+  "api": {
+    "port": 3000
+  },
+  "users": "http://users_app:3000/",
+  "storage": "./storage"
+}

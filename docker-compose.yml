@@ -28,6 +28,44 @@ services:
       - users_db
     networks:
       - users
+  storage_db:
+    image: postgres:11.5-alpine
+    container_name: storage_db
+    environment:
+      POSTGRES_PASSWORD: ${STORAGE_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${STORAGE_POSTGRES_USER}
+      POSTGRES_DB: ${STORAGE_POSTGRES_DB}
+    volumes:
+      - ./storage/docker/db/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+      - db:/var/lib/postgresql/data
+    networks:
+      - users
+    ports:
+      - 25432:5432
+  storage_app:
+    build:
+      context: .
+      dockerfile: docker/storage_app/Dockerfile
+    container_name: storage_app
+    volumes:
+      - "../:/go/src/storage"
+      - "./store:/home/storage"
+    ports:
+      - "8000:3000"
+    tty: true
+    depends_on:
+      - storage_db
+    networks:
+      - users
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/hosts:/etc/nginx/conf.d
+      - ./main/old:/var/www
+      - ./logs/nginx:/var/log/nginx
 networks:
   users:
 volumes:
